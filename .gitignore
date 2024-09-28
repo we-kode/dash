@@ -636,3 +636,16 @@ obj/
 server/Dash.Server/dash.config
 server/Dash.Server/dash.config-shm
 server/Dash.Server/dash.config-wal
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix

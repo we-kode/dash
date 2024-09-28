@@ -1,0 +1,57 @@
+@if (isEditMode) {
+<mat-toolbar class="header-toolbar">
+    <button mat-icon-button class="close-icon" aria-label="Delete icon"
+        (click)="itemList.deselectAll();isEditMode=false;">
+        <mat-icon>close</mat-icon>
+    </button>
+    <span>{{ itemList.selectedOptions.selected.length }}</span>
+    <span class="h-spacer"></span>
+    <button mat-icon-button class="delete-icon" aria-label="Delete icon"
+        (click)="delete(itemList.selectedOptions.selected)">
+        <mat-icon>delete</mat-icon>
+    </button>
+</mat-toolbar>
+
+
+<mat-selection-list #itemList>
+    @for (item of items; track item) {
+    <mat-list-option [lines]="2" [value]="item" checkboxPosition="before">
+        <span matListItemTitle>{{ item.name }}</span>
+        <span matListItemLine>Expires on {{ item.expiredDate?.toLocaleDateString() }}</span>
+    </mat-list-option>
+    <mat-divider />
+    }
+</mat-selection-list>
+} @else {
+<mat-toolbar class="header-toolbar">
+    <span>Information</span>
+    <span class="h-spacer"></span>
+    <button mat-icon-button class="edit-icon" aria-label="Delete icon" (click)="this.isEditMode = true">
+        <mat-icon>edit</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-nav-list>
+    @for (item of items; track item) {
+    <mat-list-item [lines]="2" (click)="edit(item)">
+        <span matListItemTitle>{{ item.name }}</span>
+        <span matListItemLine>Expires on {{ item.expiredDate?.toLocaleString() }}</span>
+    </mat-list-item>
+    <mat-divider />
+    }
+</mat-nav-list>
+}
+
+@if (items.length === 0 && !isLoading) {
+<ui-no-elements (refresh)="reload()" />
+}
+
+@if(isLoading) {
+<div class="loading">
+    <mat-spinner />
+</div>
+
+}
+@else {
+<ui-add-button (clickedEvent)="add()"></ui-add-button>
+}

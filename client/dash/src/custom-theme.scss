@@ -1,0 +1,165 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$_palettes: (
+  primary: (
+    0: #000000,
+    10: #001b3b,
+    20: #003060,
+    25: #003b74,
+    30: #004788,
+    35: #0f5299,
+    40: #245fa6,
+    50: #4278c0,
+    60: #5e92dc,
+    70: #7aadf9,
+    80: #a7c8ff,
+    90: #d5e3ff,
+    95: #ebf1ff,
+    98: #f9f9ff,
+    99: #fdfbff,
+    100: #ffffff,
+  ),
+  secondary: (
+    0: #000000,
+    10: #0e2000,
+    20: #1c3700,
+    25: #244300,
+    30: #2b5000,
+    35: #335d00,
+    40: #3b6a00,
+    50: #53841f,
+    60: #6b9f38,
+    70: #85ba50,
+    80: #9fd668,
+    90: #baf381,
+    95: #d1ffa1,
+    98: #efffd9,
+    99: #f8ffea,
+    100: #ffffff,
+  ),
+  tertiary: (
+    0: #000000,
+    10: #291800,
+    20: #452b00,
+    25: #543500,
+    30: #633f00,
+    35: #734a00,
+    40: #835500,
+    50: #9f6d1d,
+    60: #bd8635,
+    70: #daa04d,
+    80: #f9bb65,
+    90: #ffddb4,
+    95: #ffeedd,
+    98: #fff8f4,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+  neutral: (
+    0: #000000,
+    10: #191c20,
+    20: #2e3035,
+    25: #393b41,
+    30: #45474c,
+    35: #505258,
+    40: #5c5e64,
+    50: #75777d,
+    60: #8f9096,
+    70: #aaabb1,
+    80: #c5c6cc,
+    90: #e1e2e9,
+    95: #f0f0f7,
+    98: #f9f9ff,
+    99: #fdfbff,
+    100: #ffffff,
+    4: #0c0e13,
+    6: #111318,
+    12: #1d2024,
+    17: #282a2f,
+    22: #33353a,
+    24: #37393e,
+    87: #d9dae0,
+    92: #e7e8ee,
+    94: #ededf4,
+    96: #f3f3fa,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #171c24,
+    20: #2c313a,
+    25: #373c45,
+    30: #424751,
+    35: #4e535d,
+    40: #5a5e69,
+    50: #727782,
+    60: #8c919c,
+    70: #a7abb7,
+    80: #c2c6d2,
+    90: #dee2ef,
+    95: #edf0fd,
+    98: #f9f9ff,
+    99: #fdfbff,
+    100: #ffffff,
+  ),
+  error: (
+    0: #000000,
+    10: #410002,
+    20: #690005,
+    25: #7e0007,
+    30: #93000a,
+    35: #a80710,
+    40: #ba1a1a,
+    50: #de3730,
+    60: #ff5449,
+    70: #ff897d,
+    80: #ffb4ab,
+    90: #ffdad6,
+    95: #ffedea,
+    98: #fff8f7,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+);
+
+$_rest: (
+  secondary: map.get($_palettes, secondary),
+  neutral: map.get($_palettes, neutral),
+  neutral-variant: map.get($_palettes,  neutral-variant),
+  error: map.get($_palettes, error),
+);
+$_primary: map.merge(map.get($_palettes, primary), $_rest);
+$_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
+
+$light-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: $_primary,
+    tertiary: $_tertiary,
+  ),
+));
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: $_primary,
+    tertiary: $_tertiary,
+  ),
+));
+
+html {
+  // Apply the dark theme by default
+  @include mat.all-component-themes($dark-theme);
+  background-color: var(--mat-app-background-color);
+  color: var(--mat-app-text-color);
+
+  // Apply the light theme only when the user prefers light themes.
+  @media (prefers-color-scheme: light) {
+    // Use the `-color` mixins to only apply color styles without reapplying the same
+    // typography and density styles.
+    @include mat.all-component-themes($light-theme);
+    background-color: var(--mat-app-background-color);
+    color: var(--mat-app-text-color);
+  }
+}

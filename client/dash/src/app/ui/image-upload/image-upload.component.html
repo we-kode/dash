@@ -1,0 +1,21 @@
+<mat-form-field appearance="outline">
+    <mat-hint>Image to display</mat-hint>
+    <div class="fileUploadContainer">
+        <ng-container *ngIf="selectedImage">
+            <img [src]="selectedImage" />
+            <button class="deleteButton" mat-icon-button (click)="fileInput.value = '';remove();">
+                <mat-icon>close</mat-icon>
+            </button>
+        </ng-container>
+        <!-- no image -->
+        <div *ngIf="!selectedImage" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+            <mat-icon style="opacity: 60%;">file_upload</mat-icon>
+            <button mat-raised-button color="primary" style="width:100%; opacity: 80%;">Browse</button>
+            <small>Drag and drop here</small>
+        </div>
+        <!-- put on top of the fileUploadContainer with opacity 0 -->
+        <input #fileInput class="fileInput" type="file" multiple="false" accept="image/*"
+            (change)="setFileData($event)" />
+    </div>
+    <input matInput readonly [hidden]="true" class="hidden-file-input" />
+</mat-form-field>
