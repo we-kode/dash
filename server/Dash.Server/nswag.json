@@ -1,0 +1,22 @@
+{
+  "runtime": "Net80",
+  "defaultVariables": null,
+  "documentGenerator": {
+    "aspNetCoreToOpenApi": {
+      "project": "Dash.Server.csproj",
+      "documentName": "v1.0",
+      "msBuildProjectExtensionsPath": null,
+      "configuration": "debug",
+      "runtime": null,
+      "targetFramework": "net8.0",
+      "noBuild": true,
+      "msBuildOutputPath": null,
+      "verbose": false,
+      "workingDirectory": null,
+      "aspNetCoreEnvironment": "Development",
+      "output": "openapi/openapi.json",
+      "newLineBehavior": "LF"
+    }
+  },
+  "codeGenerators": {}
+}
