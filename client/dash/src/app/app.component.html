@@ -1,19 +1,22 @@
 <main>
   <router-outlet />
-  <mat-toolbar class="toolbarNav">
-    <button mat-icon-button routerLink='/calendar' routerLinkActive="active-link">
-      <mat-icon>calendar_month</mat-icon>
-    </button>
-    <button mat-icon-button routerLink="/information" routerLinkActive="active-link">
-      <mat-icon>dashboard</mat-icon>
-    </button>
-    <button mat-icon-button routerLink="/display/edit" routerLinkActive="active-link">
-      <mat-icon>monitor</mat-icon>
-    </button>
-    <button mat-icon-button routerLink="/settings" routerLinkActive="active-link">
-      <mat-icon>settings</mat-icon>
-    </button>
-  </mat-toolbar>
+
+  @if (router.url === '/display/edit' || !router.url.startsWith('/display')) {
+    <mat-toolbar class="toolbarNav">
+      <button mat-icon-button routerLink='/calendar' routerLinkActive="active-link">
+        <mat-icon>calendar_month</mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/information" routerLinkActive="active-link">
+        <mat-icon>dashboard</mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/display/edit" routerLinkActive="active-link">
+        <mat-icon>monitor</mat-icon>
+      </button>
+      <button mat-icon-button routerLink="/settings" routerLinkActive="active-link">
+        <mat-icon>settings</mat-icon>
+      </button>
+    </mat-toolbar>
+  }
 </main>
 
 

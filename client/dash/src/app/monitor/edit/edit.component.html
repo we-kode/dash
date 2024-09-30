@@ -1,1 +1,12 @@
+<mat-toolbar class="header-toolbar">
+    <span>Monitor</span>
+    <span class="h-spacer"></span>
+    <button mat-icon-button (click)="refresh()">
+        <mat-icon>sync</mat-icon>
+    </button>
+    <button mat-icon-button (click)="options()">
+        <mat-icon>tune</mat-icon>
+    </button>
+</mat-toolbar>
+
 <ui-add-button (clickedEvent)="add()"></ui-add-button>

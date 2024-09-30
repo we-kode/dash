@@ -11,6 +11,7 @@ import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { merge } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ImageUploadComponent } from "../../ui/image-upload/image-upload.component";
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-pinnboard-edit',
@@ -19,13 +20,14 @@ import { ImageUploadComponent } from "../../ui/image-upload/image-upload.compone
   imports: [
     MatDialogModule,
     MatButtonModule,
+    MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
     FormsModule,
-    ImageUploadComponent
+    ImageUploadComponent,
   ],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.sass'

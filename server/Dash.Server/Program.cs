@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,9 +27,10 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
          policy =>
          {
-             policy.AllowAnyOrigin();
-             policy.AllowAnyMethod();
-             policy.AllowAnyHeader();
+             policy.AllowCredentials()
+             .SetIsOriginAllowed(hostName => true)
+             .AllowAnyMethod()
+             .AllowAnyHeader();
          });
 });
 
@@ -50,9 +52,13 @@ builder.Services.AddDbContextFactory<ApplicationDBContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DashDatabase"));
 });
 
-
-builder.Services.AddSignalR().AddJsonProtocol();
-builder.Services.AddControllers();
+builder.Services.AddSignalR();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+    options.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+});
 
 // Api Documentation
 builder.Services.AddEndpointsApiExplorer();

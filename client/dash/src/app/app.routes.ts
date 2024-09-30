@@ -17,6 +17,10 @@ export const routes: Routes = [
         loadComponent: () => import('./monitor/edit/edit.component').then((m) => m.EditComponent),
     },
     {
+        path: 'display/:displayId',
+        loadComponent: () => import('./monitor/display/display.component').then((m) => m.DisplayComponent),
+    },
+    {
         path: 'settings',
         loadComponent: () => import('./settings/overview/overview.component').then((m) => m.OverviewComponent),
     },

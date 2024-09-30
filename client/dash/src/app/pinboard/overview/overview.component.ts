@@ -70,6 +70,11 @@ export class OverviewComponent implements OnInit {
         return;
       }
 
+      if (result === 'del') {
+        this.delete(elem);
+        return;
+      }
+
       this.dashAPI.save(result).subscribe(_ => {
         this.reload();
         this._snackBar.open('Item saved.');
@@ -77,8 +82,16 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  delete(items: MatListOption[]) {
-    if (items.length === 0) {
+  delete(items: MatListOption[] | Information) {
+    let ids: string[] = [];
+    if (items instanceof Information) {
+      ids = [items.id!];
+    } else {
+      ids = items.map(item => (item.value as Information).id!);
+    }
+
+
+    if (ids.length === 0) {
       this.resetEditMode();
       return;
     }
@@ -93,7 +106,7 @@ export class OverviewComponent implements OnInit {
         return;
       }
 
-      this.dashAPI.delete(items.map(item => (item.value as Information).id!)).subscribe(_ => {
+      this.dashAPI.delete(ids).subscribe(_ => {
         this.resetEditMode();
         this.reload();
         this._snackBar.open('Items removed.');
@@ -101,8 +114,8 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  private resetEditMode(): void {
-    this.isEditMode = !this.isEditMode;
+  private resetEditMode(enableMode = false): void {
+    this.isEditMode = enableMode;
   }
 
   reload(): void {

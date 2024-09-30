@@ -1,7 +1,7 @@
 <div class="edit-container">
     <h2 mat-dialog-title>{{ information.id ? 'Edit Information' : 'New Information'}}</h2>
     <mat-dialog-content class="mat-typography">
-        <mat-form-field appearance="outline" class="edit-container-content">
+        <mat-form-field class="edit-container-content">
             <mat-label>Title</mat-label>
             <input matInput 
                 placeholder="Title"
@@ -14,12 +14,7 @@
                 <mat-error>{{errorMessage()}}</mat-error>
               }
         </mat-form-field>
-        <!-- <mat-form-field appearance="outline" class="edit-container-content">
-            <mat-label>Image</mat-label>
-            <input matInput placeholder="Image" [(ngModel)]="information.image">
-            <mat-hint>Image to show on display</mat-hint>
-        </mat-form-field> -->
-        <mat-form-field appearance="outline" class="edit-container-content">
+        <mat-form-field class="edit-container-content">
             <mat-label>Expiration date</mat-label>
             <input matInput [matDatepicker]="picker" [(ngModel)]="information.expiredDate">
             <mat-hint>MM/DD/YYYY</mat-hint>
@@ -30,7 +25,7 @@
             <mat-label>Focus information</mat-label>
             <mat-slide-toggle [checked]="information.isFocused" (change)="updateFocus($event)"></mat-slide-toggle>
         </div>
-        <mat-form-field appearance="outline" class="edit-container-content">
+        <mat-form-field class="edit-container-content">
             <mat-label>Text</mat-label>
             <input matInput placeholder="Text" [(ngModel)]="information.text">
             <mat-hint>Text to display</mat-hint>
@@ -38,6 +33,9 @@
         <ui-image-upload (imageChanged)="updateImage($event)" [selectedImage]="information.image" class="edit-container-content" />
     </mat-dialog-content>
     <mat-dialog-actions align="end">
+        <button mat-icon-button aria-label="Delete element button" mat-dialog-close="del">
+            <mat-icon color="error">delete</mat-icon>
+          </button>
         <button mat-button mat-dialog-close>Cancel</button>
         <button mat-button cdkFocusInitial [disabled]="title.invalid" (click)="save()">Save</button>
     </mat-dialog-actions>

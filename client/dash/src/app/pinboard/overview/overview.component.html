@@ -35,7 +35,7 @@
     @for (item of items; track item) {
     <mat-list-item [lines]="2" (click)="edit(item)">
         <span matListItemTitle>{{ item.name }}</span>
-        <span matListItemLine>Expires on {{ item.expiredDate?.toLocaleString() }}</span>
+        <span matListItemLine>Expires on {{ item.expiredDate?.toLocaleDateString() }}</span>
     </mat-list-item>
     <mat-divider />
     }
