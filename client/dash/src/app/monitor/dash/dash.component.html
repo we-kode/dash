@@ -1,1 +1,11 @@
-<p>dash works!</p>
+<gridster [options]="options!">
+    @for (item of dashboard; track item; let i = $index) {
+    <gridster-item [item]="item">
+        <span>Here something will be!</span>
+    </gridster-item>
+    }
+</gridster>
+
+@if (isEditMode) {
+<ui-add-button (clickedEvent)="add()"></ui-add-button>
+}

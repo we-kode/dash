@@ -1,23 +1,4 @@
 <div class="display-container" (click)="stopEvent($event)">
-  here will be the dashboard preview
+  <app-dash [displayData]="displayData" />
 </div>
 
-<!-- <gridster [options]="options!">
-    @for (item of dashboard; track item; let  i = $index) {
-      <gridster-item [item]="item">
-        @if (i===0) {
-          <app-text></app-text>
-        }
-
-        @if (i === 1) {
-          <app-calendar></app-calendar>
-        }
-
-        @if (i == 2) {
-          <app-clock></app-clock>
-        }
-
-        <button mat-button secondary>TEST THIS NEW THEME WHICH IS OUR!</button>
-      </gridster-item>
-    }
-  </gridster> -->

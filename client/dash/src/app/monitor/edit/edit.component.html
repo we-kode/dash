@@ -1,6 +1,7 @@
 <mat-toolbar class="header-toolbar">
-    <span>Monitor</span>
+    <span>Display - {{ displayData?.name }}</span>
     <span class="h-spacer"></span>
+    <ui-button-cp-clipboard [content]="shareUrl" />
     <button mat-icon-button (click)="refresh()">
         <mat-icon>sync</mat-icon>
     </button>
@@ -9,4 +10,6 @@
     </button>
 </mat-toolbar>
 
-<ui-add-button (clickedEvent)="add()"></ui-add-button>
+<div class="display-edit-container">
+    <app-dash [isEditMode]="true" [displayData]="displayData" />
+</div>

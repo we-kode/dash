@@ -1,0 +1,27 @@
+<div class="edit-container">
+    <h2 mat-dialog-title>{{ 'Edit Display Settings' }}</h2>
+    <mat-dialog-content class="mat-typography">
+        <mat-form-field class="edit-container-content">
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Title" [(ngModel)]="data.name">
+            <mat-hint>Name the display</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="edit-container-content">
+            <mat-label>Rows</mat-label>
+            <input matInput type="number" [min]="minValue" [max]="maxValue" step="1" (keypress)="isNumber($event)"
+                [(ngModel)]="data.rows">
+            <mat-hint>How many rows?</mat-hint>
+        </mat-form-field>
+        <mat-form-field class="edit-container-content">
+            <mat-label>Columns</mat-label>
+            <input matInput type="number" [min]="minValue" [max]="maxValue" step="1" (keypress)="isNumber($event)"
+                [(ngModel)]="data.columns">
+            <mat-hint>How many columns?</mat-hint>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <ui-button-cp-clipboard [content]="shareUrl" />
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button cdkFocusInitial (click)="save()">Save</button>
+    </mat-dialog-actions>
+</div>

@@ -50,8 +50,7 @@ namespace Dash.Server.Controllers
         /// <summary>
         /// Loads the display to be shown with share id.
         /// </summary>
-        /// <param name="shareId"></param>
-        /// <returns></returns>
+        /// <returns>Display information</returns>
         [HttpGet("Edit")]
         // [Authorize]
         public ActionResult<Display> Edit()

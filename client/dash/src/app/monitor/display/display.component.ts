@@ -1,10 +1,17 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { DashHubClientService } from '../../services/dash-hub-client.service';
+import { DashServerModule } from '../../modules/dash-server/dash-server.module';
+import { DashServerDisplay, Display } from '../../modules/dash-server/dash-server';
+import { ActivatedRoute } from '@angular/router';
+import { DashComponent } from '../dash/dash.component';
 
 @Component({
   selector: 'app-display',
   standalone: true,
-  imports: [],
+  imports: [
+    DashServerModule,
+    DashComponent,
+  ],
   templateUrl: './display.component.html',
   styleUrl: './display.component.sass'
 })
@@ -16,12 +23,31 @@ export class DisplayComponent implements OnInit {
     event.preventDefault();
   }
 
-  private readonly defaultDisplayId = '5e02c38b-fff2-4991-85dc-693aa2a82b6d';
-  constructor(private hubService: DashHubClientService) { }
+  displayData?: Display;
+  private shareId?: string;
 
-  // TODO get shareid save it in local storage and load display info by share id
+  constructor(
+    private dashApi: DashServerDisplay,
+    private hubService: DashHubClientService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    this.shareId = this.route.snapshot.paramMap.get('displayId') ?? undefined;
+    if (this.shareId !== undefined) {
+      this.dashApi.get(this.shareId).subscribe(response => {
+        this.displayData = response.result;
+        this.subscribeToHub();
+      });
+    }
+  }
+
+  // disable left click event
+  stopEvent(e: MouseEvent) {
+    e.stopPropagation();
+  }
+
+  private subscribeToHub(): void {
     this.hubService.displayRefreshed.subscribe(_ => {
       window.location.reload();
     });
@@ -30,31 +56,7 @@ export class DisplayComponent implements OnInit {
       if (!isConnected) {
         return;
       }
-      this.hubService.subsribe(this.defaultDisplayId);
+      this.hubService.subsribe(this.displayData?.displayId!);
     });
   }
-
-  // disable left click event
-  stopEvent(e: MouseEvent) {
-    e.stopPropagation();
-  }
-
-  // options?: GridsterConfig;
-  // dashboard: Array<GridsterItem> = [];
-
-  // ngOnInit(): void {
-  //   this.options = {
-  //     gridType: GridType.Fit,
-  //     minCols: 4,
-  //     maxCols: 4,
-  //     minRows: 8,
-  //     maxRows: 8,
-  //   };
-
-  //   this.dashboard = [
-  //     { cols: 4, rows: 1, y: 0, x: 0 },
-  //     { cols: 2, rows: 7, y: 1, x: 0 },
-  //     { cols: 2, rows: 7, y: 2, x: 3 },
-  //   ];
-  // }
 }

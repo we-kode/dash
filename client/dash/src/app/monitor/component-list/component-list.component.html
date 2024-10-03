@@ -1,0 +1,16 @@
+<div class="edit-container">
+    <h2 mat-dialog-title>{{ 'Add Element' }}</h2>
+    <mat-dialog-content class="mat-typography">
+        <mat-action-list>
+            @for(component of data; track component.id) {
+            <button mat-list-item (click)="select(component)">
+                <mat-icon matListItemIcon>{{ component.image }}</mat-icon>
+                <span matListItemTitle>{{ component.name }}</span>
+            </button>
+            }
+        </mat-action-list>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+</div>

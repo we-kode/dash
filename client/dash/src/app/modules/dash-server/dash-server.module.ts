@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { DASH_SERVER_API_BASE_URL, DashServerDisplay, DashServerPinboard } from "./dash-server";
+import { DASH_SERVER_API_BASE_URL, DashServerDisplay, DashServerElement, DashServerPinboard } from "./dash-server";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 @NgModule({
@@ -13,6 +13,7 @@ import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http"
         // { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
         { provide: DashServerPinboard },
         { provide: DashServerDisplay },
+        { provide: DashServerElement },
         provideHttpClient(withInterceptorsFromDi())
     ]
 })

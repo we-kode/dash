@@ -1,7 +1,7 @@
 <main>
   <router-outlet />
 
-  @if (router.url === '/display/edit' || !router.url.startsWith('/display')) {
+  @if (router.url === '/display/edit' || (router.url !== '/' && !router.url.startsWith('/display'))) {
     <mat-toolbar class="toolbarNav">
       <button mat-icon-button routerLink='/calendar' routerLinkActive="active-link">
         <mat-icon>calendar_month</mat-icon>

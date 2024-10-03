@@ -44,7 +44,7 @@ public class ElementRepository(IDbContextFactory<ApplicationDBContext> dbContext
     public List<Component> GetComponents()
     {
         using var ctx = dbContextFactory.CreateDbContext();
-        return [.. ctx.Components];
+        return [.. ctx.Components.OrderBy(c => c.Name)];
     }
 
     public async Task Init()
@@ -56,7 +56,7 @@ public class ElementRepository(IDbContextFactory<ApplicationDBContext> dbContext
             ctx.Add(new Component
             {
                 Identifier = "app-calendar",
-                Image = "calendar-month",
+                Image = "calendar_month",
                 Name = "Calendar",
                 Config = "{}"
             });
