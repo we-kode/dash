@@ -7,7 +7,7 @@ namespace Dash.Infrastructure.Repositories.Sql;
 
 public class ElementRepository(IDbContextFactory<ApplicationDBContext> dbContextFactory) : IElementRepository
 {
-    public void Create(string config, string? content, Guid componentId, Guid displayId, DateTime? expireDate)
+    public Guid Create(string config, string? content, Guid componentId, Guid displayId, DateTime? expireDate, int x, int y, int rows, int cols)
     {
         using var ctx = dbContextFactory.CreateDbContext();
         var data = new Element
@@ -18,10 +18,15 @@ public class ElementRepository(IDbContextFactory<ApplicationDBContext> dbContext
             Display = ctx.Displays.Find(displayId) ?? throw new ArgumentNullException(nameof(displayId)),
             ExpireDate = expireDate,
             ComponentId = componentId,
-            Component = ctx.Components.Find(displayId) ?? throw new ArgumentNullException(nameof(componentId)),
+            Component = ctx.Components.Find(componentId) ?? throw new ArgumentNullException(nameof(componentId)),
+            X = x,
+            Y = y,
+            Cols = cols,
+            Rows = rows
         };
         ctx.Add(data);
         ctx.SaveChanges();
+        return data.ElementId;
     }
 
     public void Delete(Guid id)
@@ -38,7 +43,7 @@ public class ElementRepository(IDbContextFactory<ApplicationDBContext> dbContext
     public List<Element> GetByDisplay(Guid displayId)
     {
         using var ctx = dbContextFactory.CreateDbContext();
-        return [.. ctx.Elements.Where(d => d.DisplayId == displayId)];
+        return [.. ctx.Elements.Include(e => e.Component).Where(d => d.DisplayId == displayId)];
     }
 
     public List<Component> GetComponents()
@@ -98,22 +103,34 @@ public class ElementRepository(IDbContextFactory<ApplicationDBContext> dbContext
             });
         }
 
-        var isCInfo = ctx.Components.Any(c => c.Identifier == "app-info");
-        if (!isCInfo)
+        var isCText = ctx.Components.Any(c => c.Identifier == "app-text");
+        if (!isCText)
         {
             ctx.Add(new Component
             {
-                Identifier = "app-info",
+                Identifier = "app-text",
+                Image = "abc",
+                Name = "Text",
+                Config = "{}"
+            });
+        }
+
+        var isCImage = ctx.Components.Any(c => c.Identifier == "app-image");
+        if (!isCText)
+        {
+            ctx.Add(new Component
+            {
+                Identifier = "app-image",
                 Image = "image",
-                Name = "Information",
-                Config = "{text?:\"string\"image?:\"img\"}"
+                Name = "Image",
+                Config = "{}"
             });
         }
 
         await ctx.SaveChangesAsync();
     }
 
-    public void Update(Guid id, string config, string? content, Guid componentId, Guid displayId, DateTime? expireDate)
+    public void Update(Guid id, string config, string? content, Guid componentId, Guid displayId, DateTime? expireDate, int x, int y, int rows, int cols)
     {
         using var ctx = dbContextFactory.CreateDbContext();
         var data = ctx.Elements.FirstOrDefault(e => e.ElementId == id);
@@ -124,6 +141,10 @@ public class ElementRepository(IDbContextFactory<ApplicationDBContext> dbContext
             data.ComponentId = componentId;
             data.DisplayId = displayId;
             data.Config = config;
+            data.X = x;
+            data.Y = y;
+            data.Cols = cols;
+            data.Rows = rows;
             ctx.SaveChanges();
         }
     }

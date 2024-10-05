@@ -1,7 +1,10 @@
 <gridster [options]="options!">
     @for (item of dashboard; track item; let i = $index) {
     <gridster-item [item]="item">
-        <span>Here something will be!</span>
+        <app-element [element]="item['element']" [cIdentifier]="item['cIdentifier']" [isEditMode]="isEditMode" (remove)="remove($event)"/>
+        <button class="drag-handler" mat-icon-button>
+            <mat-icon>drag_pan</mat-icon>
+          </button>
     </gridster-item>
     }
 </gridster>

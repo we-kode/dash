@@ -488,10 +488,10 @@
           "200": {
             "description": "",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
                   "type": "string",
-                  "format": "binary"
+                  "format": "guid"
                 }
               }
             }
@@ -1131,6 +1131,22 @@
             "format": "date-time",
             "nullable": true
           },
+          "x": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "y": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cols": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rows": {
+            "type": "integer",
+            "format": "int32"
+          },
           "componentId": {
             "type": "string",
             "format": "guid",
@@ -1217,6 +1233,22 @@
             "type": "string",
             "format": "guid",
             "minLength": 1
+          },
+          "x": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "y": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cols": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rows": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

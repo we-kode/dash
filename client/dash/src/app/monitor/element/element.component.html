@@ -1,1 +1,38 @@
-<p>element works!</p>
+<mat-card class="example-card" appearance="outlined" (mouseover)="showActions = true"
+    (mouseleave)="showActions = false">
+    <mat-card-content>
+        @if(isEditMode && showActions) {
+        <mat-card-actions align="end">
+            <button mat-icon-button (click)="settings()">
+                <mat-icon>tune</mat-icon>
+            </button>
+            <button mat-icon-button (click)="delete()">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </mat-card-actions>
+        }
+
+        <!-- TODO load dynamic the components -->
+        @switch (cIdentifier) {
+        @case ('app-calendar') {
+        <app-calendar-overview></app-calendar-overview>
+        }
+        @case ('app-clock') {
+        <app-clock></app-clock>
+        }
+        @case ('app-date') {
+        <app-date></app-date>
+        }
+        @case ('app-pinboard') {
+        <app-pinboard></app-pinboard>
+        }
+        @case ('app-image') {
+        <app-image></app-image>
+        }
+        @case ('app-text') {
+        <app-text></app-text>
+        }
+        }
+    </mat-card-content>
+
+</mat-card>

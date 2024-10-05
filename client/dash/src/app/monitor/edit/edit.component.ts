@@ -44,6 +44,7 @@ export class EditComponent implements OnInit {
   options(): void {
     const dialogRef = this.dialog.open(DisplaySettingsComponent, {
       disableClose: true,
+      data: this.displayData,
     });
 
     dialogRef.afterClosed().subscribe(result => {

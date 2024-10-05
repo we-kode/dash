@@ -830,7 +830,7 @@ export class DashServerDisplay implements IDashServerDisplay {
 }
 
 export interface IDashServerElement {
-    create(req: ElementRequest): Observable<DashServerApiResponse<FileResponse>>;
+    create(req: ElementRequest): Observable<DashServerApiResponse<string>>;
     update(id: string, req: ElementRequest): Observable<DashServerApiResponse<FileResponse>>;
     delete(id: string, displayId: string): Observable<DashServerApiResponse<FileResponse>>;
     getByDisplay(displayId: string): Observable<DashServerApiResponse<Element[]>>;
@@ -848,7 +848,7 @@ export class DashServerElement implements IDashServerElement {
         this.baseUrl = baseUrl ?? "";
     }
 
-    create(req: ElementRequest): Observable<DashServerApiResponse<FileResponse>> {
+    create(req: ElementRequest): Observable<DashServerApiResponse<string>> {
         let url_ = this.baseUrl + "/api/Element";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -860,7 +860,7 @@ export class DashServerElement implements IDashServerElement {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/octet-stream"
+                "Accept": "application/json"
             })
         };
 
@@ -871,37 +871,34 @@ export class DashServerElement implements IDashServerElement {
                 try {
                     return this.processCreate(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<DashServerApiResponse<FileResponse>>;
+                    return _observableThrow(e) as any as Observable<DashServerApiResponse<string>>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<DashServerApiResponse<FileResponse>>;
+                return _observableThrow(response_) as any as Observable<DashServerApiResponse<string>>;
         }));
     }
 
-    protected processCreate(response: HttpResponseBase): Observable<DashServerApiResponse<FileResponse>> {
+    protected processCreate(response: HttpResponseBase): Observable<DashServerApiResponse<string>> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
-            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
-            if (fileName) {
-                fileName = decodeURIComponent(fileName);
-            } else {
-                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            }
-            return _observableOf(new DashServerApiResponse(status, _headers, { fileName: fileName, data: responseBlob as any, status: status, headers: _headers }));
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(new DashServerApiResponse(status, _headers, result200));
+            }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<DashServerApiResponse<FileResponse>>(new DashServerApiResponse(status, _headers, null as any));
+        return _observableOf<DashServerApiResponse<string>>(new DashServerApiResponse(status, _headers, null as any));
     }
 
     update(id: string, req: ElementRequest): Observable<DashServerApiResponse<FileResponse>> {
@@ -1974,6 +1971,10 @@ export class Element implements IElement {
     content?: string | undefined;
     creationDate!: Date;
     expireDate?: Date | undefined;
+    x?: number;
+    y?: number;
+    cols?: number;
+    rows?: number;
     componentId!: string;
     component?: Component;
     displayId!: string;
@@ -1995,6 +1996,10 @@ export class Element implements IElement {
             this.content = _data["content"];
             this.creationDate = _data["creationDate"] ? new Date(_data["creationDate"].toString()) : <any>undefined;
             this.expireDate = _data["expireDate"] ? new Date(_data["expireDate"].toString()) : <any>undefined;
+            this.x = _data["x"];
+            this.y = _data["y"];
+            this.cols = _data["cols"];
+            this.rows = _data["rows"];
             this.componentId = _data["componentId"];
             this.component = _data["component"] ? Component.fromJS(_data["component"]) : <any>undefined;
             this.displayId = _data["displayId"];
@@ -2016,6 +2021,10 @@ export class Element implements IElement {
         data["content"] = this.content;
         data["creationDate"] = this.creationDate ? this.creationDate.toISOString() : <any>undefined;
         data["expireDate"] = this.expireDate ? this.expireDate.toISOString() : <any>undefined;
+        data["x"] = this.x;
+        data["y"] = this.y;
+        data["cols"] = this.cols;
+        data["rows"] = this.rows;
         data["componentId"] = this.componentId;
         data["component"] = this.component ? this.component.toJSON() : <any>undefined;
         data["displayId"] = this.displayId;
@@ -2030,6 +2039,10 @@ export interface IElement {
     content?: string | undefined;
     creationDate: Date;
     expireDate?: Date | undefined;
+    x?: number;
+    y?: number;
+    cols?: number;
+    rows?: number;
     componentId: string;
     component?: Component;
     displayId: string;
@@ -2106,6 +2119,10 @@ export class ElementRequest implements IElementRequest {
     expireDate?: Date | undefined;
     componentId!: string;
     displayId!: string;
+    x?: number;
+    y?: number;
+    cols?: number;
+    rows?: number;
 
     constructor(data?: IElementRequest) {
         if (data) {
@@ -2123,6 +2140,10 @@ export class ElementRequest implements IElementRequest {
             this.expireDate = _data["expireDate"] ? new Date(_data["expireDate"].toString()) : <any>undefined;
             this.componentId = _data["componentId"];
             this.displayId = _data["displayId"];
+            this.x = _data["x"];
+            this.y = _data["y"];
+            this.cols = _data["cols"];
+            this.rows = _data["rows"];
         }
     }
 
@@ -2140,6 +2161,10 @@ export class ElementRequest implements IElementRequest {
         data["expireDate"] = this.expireDate ? this.expireDate.toISOString() : <any>undefined;
         data["componentId"] = this.componentId;
         data["displayId"] = this.displayId;
+        data["x"] = this.x;
+        data["y"] = this.y;
+        data["cols"] = this.cols;
+        data["rows"] = this.rows;
         return data;
     }
 }
@@ -2150,6 +2175,10 @@ export interface IElementRequest {
     expireDate?: Date | undefined;
     componentId: string;
     displayId: string;
+    x?: number;
+    y?: number;
+    cols?: number;
+    rows?: number;
 }
 
 export class Information implements IInformation {

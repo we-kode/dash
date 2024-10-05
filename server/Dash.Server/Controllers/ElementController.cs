@@ -12,18 +12,18 @@ namespace Dash.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ElementController(IHubContext<ElementHub> hubContext, IElementRepository repository) : ControllerBase
+    public class ElementController(IHubContext<DisplayHub> hubContext, IElementRepository repository) : ControllerBase
     {
         private const string DASH_DISPLAY_REFRESH = "DASH_DISPLAY_REFRESH";
 
         // create element
         [HttpPost]
         // [Authorize]
-        public async Task<ActionResult> Create([FromBody] ElementRequest req)
+        public async Task<ActionResult<Guid>> Create([FromBody] ElementRequest req)
         {
-            repository.Create(req.Config, req.Content, req.ComponentId, req.DisplayId, req.ExpireDate);
+            var id = repository.Create(req.Config, req.Content, req.ComponentId, req.DisplayId, req.ExpireDate, req.X, req.Y, req.Rows, req.Cols);
             await hubContext.Clients.Group($"{req.DisplayId}").SendAsync(DASH_DISPLAY_REFRESH).ConfigureAwait(false);
-            return Ok();
+            return id;
         }
 
         // udpate element
@@ -31,7 +31,7 @@ namespace Dash.Server.Controllers
         // [Authorize]
         public async Task<ActionResult> Update(Guid id, [FromBody] ElementRequest req)
         {
-            repository.Update(id, req.Config, req.Content, req.ComponentId, req.DisplayId, req.ExpireDate);
+            repository.Update(id, req.Config, req.Content, req.ComponentId, req.DisplayId, req.ExpireDate, req.X, req.Y, req.Rows, req.Cols);
             await hubContext.Clients.Group($"{req.DisplayId}").SendAsync(DASH_DISPLAY_REFRESH).ConfigureAwait(false);
             return Ok();
         }
