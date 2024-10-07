@@ -15,10 +15,10 @@
         <!-- TODO load dynamic the components -->
         @switch (cIdentifier) {
         @case ('app-calendar') {
-        <app-calendar-overview></app-calendar-overview>
+        <app-calendar></app-calendar>
         }
         @case ('app-clock') {
-        <app-clock></app-clock>
+        <app-clock [element]="element"></app-clock>
         }
         @case ('app-date') {
         <app-date></app-date>
@@ -27,10 +27,10 @@
         <app-pinboard></app-pinboard>
         }
         @case ('app-image') {
-        <app-image></app-image>
+        <app-image [element]="element"></app-image>
         }
         @case ('app-text') {
-        <app-text></app-text>
+        <app-text [element]="element"></app-text>
         }
         }
     </mat-card-content>

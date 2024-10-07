@@ -1,3 +1,9 @@
-<div>
-    <h1 class="mat-display-large">Herzlich Willkommen!</h1>
+<div #container class="date-container">
+    <div [style.font-weight]="config.fontWeight" [style.font-size]="config.fontSize" [style.font-style]="config.fontStyle" [style.color]="config.fontColor">
+        @if (!element.content) {
+        No content!
+        } @else {
+        {{element.content}}
+        }
+    </div>
 </div>

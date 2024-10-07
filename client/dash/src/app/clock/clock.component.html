@@ -1,3 +1,9 @@
-<div class="clock-container clock2">
-    <div class="time">{{date}}</div>
+<div class="date-container">
+    @if(config.type === 'digital') {
+    <app-digital-clock></app-digital-clock>
+    } @else {
+    <span id="canvasClock">
+        <app-analog-clock [size]="config.size"></app-analog-clock>
+    </span>
+    }
 </div>

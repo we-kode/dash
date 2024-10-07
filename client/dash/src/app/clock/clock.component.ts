@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Element } from '../modules/dash-server/dash-server';
+import { AnalogClockComponent } from './analog-clock/analog-clock.component';
+import { DigitalClockComponent } from './digital-clock/digital-clock.component';
 
 @Component({
   selector: 'app-clock',
   standalone: true,
-  imports: [],
+  imports: [
+    AnalogClockComponent,
+    DigitalClockComponent,
+  ],
   templateUrl: './clock.component.html',
   styleUrl: './clock.component.sass'
 })
-export class ClockComponent implements OnInit {
+export class ClockComponent {
+  @Input()
+  element!: Element;
 
-  date = '';
-
-  ngOnInit(): void {
-    setInterval(() => {
-      const currentDate = new Date();
-      this.date = currentDate.toLocaleTimeString();
-    }, 1000);
+  config = {
+    'type': 'analog',
+    'size': 500,
   }
-
 }

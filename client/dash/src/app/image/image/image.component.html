@@ -1,1 +1,8 @@
-<p>image works!</p>
+<div class="container">
+    @if (!element.content) {
+    No content!
+    } @else {
+    <img src="data:image/png;base64,{{element.content}}" [class.oversize-w]="!config.width && !config.height"
+        [width]="config.width" [height]="config.height">
+    }
+</div>

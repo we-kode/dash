@@ -1,0 +1,6 @@
+<div #container>
+    <div [fittext]="true" [container]="container" [maxFontSize]="500" [modelToWatch]="time">
+        {{time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}}
+    </div>
+</div>
+

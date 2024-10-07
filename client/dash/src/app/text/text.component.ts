@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Element } from '../modules/dash-server/dash-server';
 
 @Component({
   selector: 'app-text',
@@ -8,5 +9,13 @@ import { Component } from '@angular/core';
   styleUrl: './text.component.sass'
 })
 export class TextComponent {
+  @Input()
+  element!: Element;
 
+  config = {
+    'fontSize': 'normal',
+    'fontWeight': 'normal',
+    'fontColor': 'inherit',
+    'fontStyle': 'normal'
+  }
 }
